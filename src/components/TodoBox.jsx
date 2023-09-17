@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react'
 import {useSelector} from "react-redux";
-import { Link } from "react-router-dom";
 import classNames from "classnames";
 import Item from "./Item";
 import {getTodos} from "../redux/selectors";
@@ -56,14 +55,15 @@ const TodoBox = ( ) => {
             <button type="button" className={ allButtonClass} onClick={ onClickHandler}>All</button>
             <button type="button" className={ uncompletedButtonClass} onClick={ onClickHandler}>Uncompleted</button>
         </div>
-        <Row className="justify-content-between">
+        </Row>
+        <Row className=" ">
+
+         {filteredTodos.map((selectedTodo) =>
+              <Item key={selectedTodo.id} selectedTodo={selectedTodo}/>
+        )}
 
 
-         {filteredTodos.map((selectedTodo) => <Link key={selectedTodo.id} to={`${selectedTodo.id}` }>
-             <Item key={selectedTodo.id} selectedTodo={selectedTodo}/>
-         </Link>)}
-         </Row>
-        </Row>.
+        </Row>
      </Container>)
 }
 
