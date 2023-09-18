@@ -3,7 +3,7 @@ import TodoBox from "./TodoBox";
 import {useDispatch,useSelector} from "react-redux";
 import {addTodo,deleteAll} from "../redux/todosSlice";
 import {getTodos} from "../redux/selectors";
-import { useFormik } from 'formik';
+import {useFormik } from 'formik';
 import Form from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';

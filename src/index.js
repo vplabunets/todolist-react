@@ -15,7 +15,8 @@ root.render(
   <React.StrictMode>
       <Provider store={store}>
           <PersistGate loading={null} persistor={persistor}>
-          <BrowserRouter  basename="/todolist-react">
+          {/*<BrowserRouter  basename="/todolist-react">*/}
+              <BrowserRouter >
               <App />
           </BrowserRouter>
           </PersistGate>
