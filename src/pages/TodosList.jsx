@@ -1,10 +1,13 @@
-import React from 'react'
-import TodoBox from "../components/TodoBox";
+import React from 'react';
+import TodoBox from '../components/TodoBox';
+import { Layout } from '../Layout';
 
 function TodosList() {
     return (
-        <div><TodoBox/></div>
-    )
+        <Layout>
+            <TodoBox />
+        </Layout>
+    );
 }
 
-export default TodosList
+export default TodosList;

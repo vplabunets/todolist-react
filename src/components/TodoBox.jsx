@@ -1,70 +1,59 @@
-import React, {useEffect, useState} from 'react'
-import {useSelector} from "react-redux";
-import classNames from "classnames";
-import Item from "./Item";
-import {getTodos} from "../redux/selectors";
-import Container from 'react-bootstrap/Container';
-import Row from "react-bootstrap/Row";
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import Item from './Item';
+import { getTodos } from '../redux/selectors/todosSelectors';
+import Row from 'react-bootstrap/Row';
+import { todoStatuses } from '../utils/todoStatuses';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import { ToggleButton } from 'react-bootstrap';
 
-const TodoBox = ( ) => {
+const TodoBox = () => {
     const todos = useSelector(getTodos);
-    const [todosStatus, setTodosStatus] =useState("all");
-    const [filteredTodos, setFilteredTodos] =useState(todos);
+    const [todosStatus, setTodosStatus] = useState(todoStatuses.all);
+    const [filteredTodos, setFilteredTodos] = useState(todos);
 
     useEffect(() => {
-        if (todosStatus==="completed"){
-             setFilteredTodos(todos.filter(todo=>todo.isCompleted===true))
-        }
-        if (todosStatus==="all"){
-             setFilteredTodos(todos)
-        }
-        if (todosStatus==="uncompleted"){
-             setFilteredTodos(todos.filter(todo=>todo.isCompleted===false))
-        }
+        let filtered = todos;
 
-    }, [todosStatus,todos, filteredTodos]);
-
-    const onClickHandler = (event) => {
-         if (event.target.textContent==="Completed"){
-            setTodosStatus("completed")
-         }
-        if (event.target.textContent==="All"){
-            setTodosStatus("all")
-         }
-        if (event.target.textContent==="Uncompleted"){
-            setTodosStatus("uncompleted")
-         }
-
+        if (todosStatus === todoStatuses.completed) {
+            filtered = todos.filter(todo => todo.isCompleted);
+        }
+        if (todosStatus === todoStatuses.uncompleted) {
+            filtered = todos.filter(todo => !todo.isCompleted);
+        }
+        setFilteredTodos(filtered);
+    }, [todosStatus, todos]);
+    function handleStatus(status) {
+        setTodosStatus(status);
     }
-    const completedButtonClass = classNames('btn', 'btn-outline-primary', {
-        'active': todosStatus === 'completed',
-    });
 
-    const allButtonClass = classNames('btn', 'btn-outline-primary', {
-        'active': todosStatus === 'all',
-    });
+    return (
+        <>
+            <Row>
+                <ButtonGroup className="mb-2 lg text-capitalize">
+                    {Object.entries(todoStatuses).map((status, idx) => (
+                        <ToggleButton
+                            key={idx}
+                            id={`status-${idx}`}
+                            type="radio"
+                            variant={'outline-primary'}
+                            name="radio"
+                            value={status[0]}
+                            checked={todosStatus === status[0]}
+                            onChange={handleStatus.bind(null, status[0])}
+                        >
+                            {status[0]}
+                        </ToggleButton>
+                    ))}
+                </ButtonGroup>
+            </Row>
+            <Row className=" ">
+                {filteredTodos.map(selectedTodo => (
+                    <Item key={selectedTodo.id} selectedTodo={selectedTodo} />
+                ))}
+            </Row>
+        </>
+    );
+};
 
-    const uncompletedButtonClass = classNames('btn', 'btn-outline-primary', {
-        'active': todosStatus === 'uncompleted',
-    });
-
-    return ( <Container className="  m-3">
-        <Row>
-        <div className="btn-group mb-4" role="group" aria-label="Basic outlined example">
-            <button type="button" className={ completedButtonClass} onClick={ onClickHandler}>Completed</button>
-            <button type="button" className={ allButtonClass} onClick={ onClickHandler}>All</button>
-            <button type="button" className={ uncompletedButtonClass} onClick={ onClickHandler}>Uncompleted</button>
-        </div>
-        </Row>
-        <Row className=" ">
-
-         {filteredTodos.map((selectedTodo) =>
-              <Item key={selectedTodo.id} selectedTodo={selectedTodo}/>
-        )}
-
-
-        </Row>
-     </Container>)
-}
-
-export default TodoBox
+export default TodoBox;
